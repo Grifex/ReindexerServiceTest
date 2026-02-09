@@ -1,4 +1,4 @@
-# Как запускать yaml конфигурацией
+# Как запускать c yaml конфигурацией
 
 ```bash
 docker compose up -d redis reindexer

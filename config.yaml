@@ -1,0 +1,9 @@
+http:
+  addr: ":8080"
+
+reindexer:
+  dsn: "cproto://127.0.0.1:6534/db"
+  namespace: "documents"
+
+cache:
+  ttl: "15m"

@@ -1,0 +1,38 @@
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+    ports:
+      - "6379:6379"
+
+  reindexer:
+    image: reindexer/reindexer:latest
+    restart: unless-stopped
+    ports:
+      - "9088:9088"
+      - "6534:6534"
+    volumes:
+      - reindexer-data:/db
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - reindexer
+    ports:
+      - "8080:8080"
+    environment:
+      HTTP_ADDR: ":8080"
+      REINDEXER_DSN: "cproto://reindexer:6534/db"
+      REINDEXER_NAMESPACE: "documents"
+      CACHE_TTL: "15m"
+
+      REDIS_ADDR: "redis:6379"
+      REDIS_PASSWORD: ""
+      REDIS_DB: "0"
+      REDIS_PREFIX: "doc:"
+
+volumes:
+  reindexer-data:
